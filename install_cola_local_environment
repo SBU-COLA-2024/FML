@@ -1,0 +1,81 @@
+if [ -n "${ROOTDIR}" ]; then
+    source stop_cola
+fi
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ------------------------------ Basic Settings ------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+function addvar () {
+    local tmp="${!1}" ;
+    tmp="${tmp//:${2}:/:}" ;
+    tmp="${tmp/#${2}:/}" ;
+    tmp="${tmp/%:${2}/}" ;
+    export $1="${2}:${tmp}" ;
+}
+
+if [ -n "${OMP_NUM_THREADS}" ]; then
+    export OLD_OMP_NUM_THREADS=$OMP_NUM_THREADS
+fi
+
+if [ -n "${PYTHONPATH}" ]; then
+    export OLD_PYTHONPATH=$PYTHONPATH
+fi
+
+if [ -n "${PATH}" ]; then
+    export OLD_PATH=$PATH
+fi
+
+if [ -n "${C_INCLUDE_PATH}" ]; then
+    export OLD_C_INCLUDE_PATH=$C_INCLUDE_PATH
+fi
+
+if [ -n "${CPLUS_INCLUDE_PATH}" ]; then
+    export OLD_CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH
+fi
+
+if [ -n "${LDFLAGS}" ]; then
+    export OLD_LDFLAGS=$LDFLAGS
+fi
+
+if [ -n "${CPATH}" ]; then
+    export OLD_CPATH=$CPATH
+fi
+
+if [ -n "${NUMPY_HEADERS}" ]; then
+    export OLD_NUMPY_HEADERS=$NUMPY_HEADERS
+fi
+
+source set_installation_options
+export MAKE_NUM_THREADS=$OMP_NUM_THREADS-1
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------- Install Virtual Enviroment -------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+echo 'Activating Virtual Enviroment'
+
+$GLOBALPYTHON3 -m venv $ROOTDIR/.local/
+
+source $ROOTDIR/.local/bin/activate
+
+if [ -n "${GLOBAL_PACKAGES_LOCATION}" ]; then
+    addvar PYTHONPATH $GLOBAL_PACKAGES_LOCATION/lib/python$PYTHON_VERSION/site-packages
+fi
+
+addvar PYTHONPATH $ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages
+
+addvar PYTHONPATH $ROOTDIR/.local/lib
+
+addvar PATH $ROOTDIR/.local/bin
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+source stop_cola

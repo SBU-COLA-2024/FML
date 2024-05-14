@@ -1,0 +1,8 @@
+.local/
+*.out
+core.*
+*.a
+*.o
+*.pyc
+*.egg-info/
+*.out

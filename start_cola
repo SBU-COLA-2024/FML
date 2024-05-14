@@ -1,0 +1,96 @@
+if [ -n "${START_COLA_DONE}" ]; then
+  source stop_cola
+fi
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ------------------------------ Basic Settings ------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+function addvar () {
+    local tmp="${!1}" ;
+    tmp="${tmp//:${2}:/:}" ;
+    tmp="${tmp/#${2}:/}" ;
+    tmp="${tmp/%:${2}/}" ;
+    export $1="${2}:${tmp}" ;
+}
+
+if [ -n "${OMP_NUM_THREADS}" ]; then
+  export OLD_OMP_NUM_THREADS=$OMP_NUM_THREADS
+fi
+
+if [ -n "${LD_LIBRARY_PATH}" ]; then
+  export OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+fi
+
+if [ -n "${PYTHONPATH}" ]; then
+  export OLD_PYTHONPATH=$PYTHONPATH
+fi
+
+if [ -n "${PATH}" ]; then
+  export OLD_PATH=$PATH
+fi
+
+if [ -n "${C_INCLUDE_PATH}" ]; then
+  export OLD_C_INCLUDE_PATH=$C_INCLUDE_PATH
+fi
+
+if [ -n "${CPLUS_INCLUDE_PATH}" ]; then
+  export OLD_CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH
+fi
+
+if [ -n "${LDFLAGS}" ]; then
+  export OLD_LDFLAGS=$LDFLAGS
+fi
+
+if [ -n "${CPATH}" ]; then
+  export OLD_CPATH=$CPATH
+fi
+
+if [ -n "${NUMPY_HEADERS}" ]; then
+  export OLD_NUMPY_HEADERS=$NUMPY_HEADERS
+fi
+
+source set_installation_options
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ---------------------- Activate Virtual Enviroment -------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+source $ROOTDIR/.local/bin/activate
+
+if [ -n "${GLOBAL_PACKAGES_LOCATION}" ]; then
+  addvar PYTHONPATH $GLOBAL_PACKAGES_LOCATION/lib/python$PYTHON_VERSION/site-packages
+
+  addvar LD_LIBRARY_PATH $GLOBAL_PACKAGES_LOCATION/lib
+fi
+
+addvar LD_LIBRARY_PATH $ROOTDIR/.local/lib
+
+addvar PYTHONPATH $ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages
+
+addvar PYTHONPATH $ROOTDIR/.local/lib
+
+addvar PATH $ROOTDIR/.local/bin
+
+export NUMPY_HEADERS=$ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages/numpy/core/include
+
+addvar LD_LIBRARY_PATH $ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages/numpy/core/lib
+
+export CPATH=$CPATH:$ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages/numpy/core/include
+
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:$ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages/numpy/core/include
+
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages/numpy/core/include
+
+export MAKE_NUM_THREADS=$OMP_NUM_THREADS-1
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+export START_COLA_DONE=1

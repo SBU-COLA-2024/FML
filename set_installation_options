@@ -1,0 +1,50 @@
+export ROOTDIR=$PWD
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# -----------------------  OPTIONS FOR SYSTEM INSTALLATION -------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+#  ---------------------------------------------------------------------------
+# HOW COLA SHOULD BE INSTALLED? -------------------------------
+
+export MINICONDA_INSTALLATION=1
+
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# --------------------------- DERIVED OPTIONS  -------------------------------
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
+if  [ -n "${MINICONDA_INSTALLATION}" ]; then
+
+    export PATH=$CONDA_PREFIX/bin:$PATH
+    export LDFLAGS="-L$CONDA_PREFIX/lib":$LDFLAGS
+    
+    export CPLUS_INCLUDE_PATH=$CONDA_PREFIX/include/python3.8/:$CPLUS_INCLUDE_PATH
+    export C_INCLUDE_PATH=$CONDA_PREFIX/include/python3.8/:$C_INCLUDE_PATH
+    
+    export CPLUS_INCLUDE_PATH=$CONDA_PREFIX/lib/python3.8/site-packages/numpy/core/include/:$CPLUS_INCLUDE_PATH
+    export C_INCLUDE_PATH=$CONDA_PREFIX/lib/python3.8/site-packages/numpy/core/include:$C_INCLUDE_PATH
+
+    export GLOBALPYTHON3=$CONDA_PREFIX/bin/python3
+    export GLOBAL_PACKAGES_LOCATION=$CONDA_PREFIX
+
+    export PYTHON_VERSION=3.8
+    export PYTHONPATH=$CONDA_PREFIX/lib/python$PYTHON_VERSION/site-packages:$PYTHONPATH
+    export PYTHONPATH=$CONDA_PREFIX/lib:$PYTHONPATH
+
+    ulimit -s unlimited
+
+    export FORTRAN_COMPILER=$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-gfortran
+    export C_COMPILER=$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-cc
+    export CXX_COMPILER=$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-g++
+    
+    export MPI_FORTRAN_COMPILER=$CONDA_PREFIX/bin/mpif90
+    export MPI_CXX_COMPILER=$CONDA_PREFIX/bin/mpicc
+    export MPI_CC_COMPILER=$CONDA_PREFIX/bin/mpicxx
+fi
+
+export PIP3=$ROOTDIR/.local/bin/pip$PYTHON_VERSION
+export PYTHON3=$ROOTDIR/.local/bin/python$PYTHON_VERSION
