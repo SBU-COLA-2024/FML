@@ -1,72 +1,13 @@
 if [ -n "${ROOTDIR}" ]; then
-    source stop_cola
+  source stop_cola
 fi
 
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
-# ------------------------------ Basic Settings ------------------------------
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
+source start_cola
 
-function addvar () {
-    local tmp="${!1}" ;
-    tmp="${tmp//:${2}:/:}" ;
-    tmp="${tmp/#${2}:/}" ;
-    tmp="${tmp/%:${2}/}" ;
-    export $1="${2}:${tmp}" ;
-}
-
-if [ -n "${OMP_NUM_THREADS}" ]; then
-    export OLD_OMP_NUM_THREADS=$OMP_NUM_THREADS
+if [ -z "${ROOTDIR}" ]; then
+    echo -e '\033[0;31m''ERROR ENV VARIABLE ROOTDIR IS NOT DEFINED''\033[0m'
+    return 1
 fi
-
-if [ -n "${LD_LIBRARY_PATH}" ]; then
-    export OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-fi
-
-if [ -n "${PYTHONPATH}" ]; then
-    export OLD_PYTHONPATH=$PYTHONPATH
-fi
-
-if [ -n "${PATH}" ]; then
-    export OLD_PATH=$PATH
-fi
-
-if [ -n "${C_INCLUDE_PATH}" ]; then
-    export OLD_C_INCLUDE_PATH=$C_INCLUDE_PATH
-fi
-
-if [ -n "${CPLUS_INCLUDE_PATH}" ]; then
-    export OLD_CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH
-fi
-
-if [ -n "${SET_INSTALLATION_OPTIONS}" ]; then
-    source $SET_INSTALLATION_OPTIONS
-else
-    source set_installation_options
-fi
-
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
-# ---------------------- Activate Virtual Enviroment -------------------------
-# ----------------------------------------------------------------------------
-# ----------------------------------------------------------------------------
-
-source $ROOTDIR/.local/bin/activate
-
-if [ -n "${GLOBAL_PACKAGES_LOCATION}" ]; then
-addvar PYTHONPATH $GLOBAL_PACKAGES_LOCATION/lib/python$PYTHON_VERSION/site-packages
-
-addvar LD_LIBRARY_PATH $GLOBAL_PACKAGES_LOCATION/lib
-fi
-
-addvar LD_LIBRARY_PATH $ROOTDIR/.local/lib
-
-addvar PYTHONPATH $ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages
-
-addvar PYTHONPATH $ROOTDIR/.local/lib
-
-addvar PATH $ROOTDIR/.local/bin
 
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
@@ -77,7 +18,12 @@ addvar PATH $ROOTDIR/.local/bin
 cd $ROOTDIR/FML/COLASolver
 
 make clean
-make -j $MAKE_NUM_THREADS all
+
+if [ -n "${OMP_NUM_THREADS}" ]; then
+  make -j $MAKE_NUM_THREADS all
+else
+  make all
+fi
 
 cd $ROOTDIR
 
