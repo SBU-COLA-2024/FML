@@ -158,9 +158,17 @@ export C_INCLUDE_PATH=$C_INCLUDE_PATH:$ROOTDIR/.local/lib/python$PYTHON_VERSION/
 
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$ROOTDIR/.local/lib/python$PYTHON_VERSION/site-packages/numpy/core/include
 
-export INCLUDE=$INCLUDE:$ROOTDIR
+export CPATH=$CPATH:$ROOTDIR
+export CPATH=$CPATH:$ROOTDIR/FML
 
-export INCLUDE=$INCLUDE:$ROOTDIR/FML
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:$ROOTDIR
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:$ROOTDIR/FML
+
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$ROOTDIR
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$ROOTDIR/FML
+
+export OBJC_INCLUDE_PATH=$OBJC_INCLUDE_PATH:$ROOTDIR
+export OBJC_INCLUDE_PATH=$OBJC_INCLUDE_PATH:$ROOTDIR/FML
 
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
