@@ -6,8 +6,12 @@ SHELL := /bin/bash
 # Set C++17 compliant compiler. If USE_MPI we use MPICC 
 #===================================================
 
-CC      = g++ -std=c++1z -O3 -Wall -Wextra -march=native
-MPICC   = mpicxx -std=c++1z -O3 -Wall -Wextra -march=native
+#VM BEGINS
+#CC      = g++ -std=c++1z -O3 -Wall -Wextra -march=native
+#MPICC   = mpicxx -std=c++1z -O3 -Wall -Wextra -march=native
+CC      = $(CONDA_PREFIX)/bin/x86_64-conda-linux-gnu-g++ -std=c++1z -O3 -Wall -Wextra -march=native
+MPICC   = $(CONDA_PREFIX)/bin/mpicxx -std=c++1z -O3 -Wall -Wextra -march=native
+#VM ENDS
 
 #===================================================
 # Options
@@ -43,30 +47,43 @@ USE_CHUNKPIX     = false
 #===================================================
 
 # Main library include (path to folder containin FML/)
-FML_INCLUDE    = $(HOME)/local/FML
+#VM BEGINS
+FML_INCLUDE    = $(ROOTDIR)
+#VM ENDS
 
 # FFTW
-FFTW_INCLUDE   = $(HOME)/local/include
-FFTW_LIB       = $(HOME)/local/lib
+#VM BEGINS
+FFTW_INCLUDE   = $(CONDA_PREFIX)/include
+FFTW_LIB       = $(CONDA_PREFIX)/lib
+#VM ENDS
 FFTW_LINK      = -lfftw3
 FFTW_MPI_LINK  = -lfftw3_mpi
 FFTW_OMP_LINK  = -lfftw3_threads
 
 # GSL
-GSL_INCLUDE    = $(HOME)/local/include
-GSL_LIB        = $(HOME)/local/lib
+#VM BEGINS
+GSL_INCLUDE    = $(CONDA_PREFIX)/include
+GSL_LIB        = $(CONDA_PREFIX)/lib
+#VM ENDS
 GSL_LINK       = -lgsl -lgslcblas
 
 # LUA
-LUA_INCLUDE    = $(HOME)/local/include
-LUA_LIB        = $(HOME)/local/lib
+#VM BEGINS
+LUA_INCLUDE    = $(CONDA_PREFIX)/local/include
+LUA_LIB        = $(CONDA_PREFIX)/local/lib
+#VM ENDS
 LUA_LINK       = -llua -ldl
 
 # HEALPIX
-HP_INCLUDE     = $(HOME)/local/Healpix_3.82_gcc/include/healpix_cxx/
-HP_LIB         = $(HOME)/local/Healpix_3.82_gcc/lib
-CFITSIO_INCLUDE = $(HOME)/local/include
-CFITSIO_LIB    = $(HOME)/local/lib
+#VM BEGINS
+HP_INCLUDE     = $(CONDA_PREFIX)/local/Healpix_3.82_gcc/include/healpix_cxx/
+HP_LIB         = $(CONDA_PREFIX)/local/Healpix_3.82_gcc/lib
+#VM ENDS
+
+#VM BEGINS
+CFITSIO_INCLUDE = $(CONDA_PREFIX)/include
+CFITSIO_LIB    =  $(CONDA_PREFIX)/lib
+#VM ENDS
 HP_LINK_C      = -lchealpix -lcfitsio
 HP_LINK        = -lhealpix_cxx -lsharp -lcfitsio
 
@@ -142,7 +159,7 @@ endif
 #===================================================
 
 VPATH := $(FML_INCLUDE)/FML/Global/:$(FML_INCLUDE)/FML/Spline/:$(FML_INCLUDE)/FML/ODESolver/:$(FML_INCLUDE)/FML/GadgetUtils/:$(FML_INCLUDE)/FML/ParameterMap/:$(FML_INCLUDE)/FML/FileUtils/:src/:$(FML_INCLUDE)/FML/Math/
-OBJS = Main.o Global.o Spline.o ODESolver.o GadgetUtils.o ParameterMap.o FileUtils.o Math.o
+OBJS = Main.o Spline.o ODESolver.o GadgetUtils.o ParameterMap.o FileUtils.o Math.o Global.o
 
 TARGETS := nbody
 all: $(TARGETS)
