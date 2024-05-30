@@ -52,21 +52,21 @@ If you are one of the Cola developers with set SSH keys to the FML GitHub reposi
 
 ### Install COLA (.local) local environment
 
-     Run the commands below just once after cloning the repository. Here, we assume you are in the folder where you cloned the FML repository.
+Run the commands below just once after cloning the repository. Here, we assume you are in the folder where you cloned the FML repository.
      
      cd ./FML
      source install_cola_local_environment
 
 ### Compile COLA 
 
-     Run the commands below. Here, we assume you are in the folder where you cloned the FML repository.
+Run the commands below. Here, we assume you are in the folder where you cloned the FML repository.
 
      cd ./FML 
      source compile_cola
 
 ### Run Cola Example 101
 
-     Whenever you want to run Cola, you must activate both the conda environment and the local private Python (.local) environment. Here, we assume you are in the folder where you cloned the FML repository.
+Whenever you want to run Cola, you must activate both the conda environment and the local private Python (.local) environment. Here, we assume you are in the folder where you cloned the FML repository.
      
      cd ./FML 
      conda activate cola
